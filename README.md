@@ -2,6 +2,8 @@
 
 Android application for getting the card details of a debit card from its first six digits. It communicates with the [binlist api](https://binlist.net/).
 
+![Monee](monee.png)
+
 # Architecture
 The app's architecture is MVVM and Clean architecture.
 
