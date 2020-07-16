@@ -1,0 +1,65 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    // data module
+    implementation project(':domain')
+    implementation project(':core')
+
+    // Kotlin
+    implementation rootProject.libs.kotlinStdlibJdk7
+
+    // Dagger Hilt
+    implementation rootProject.libs.daggerHilt
+    kapt rootProject.libs.daggerHiltCompiler
+
+    implementation rootProject.libs.daggerHiltViewModel
+    kapt rootProject.libs.daggerHiltAndroidCompiler
+
+    // Jetpack libraries
+    implementation rootProject.libs.lifecycle
+    implementation rootProject.libs.coreKtx
+    implementation rootProject.libs.viewModel
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
+
+    // Coroutines
+    implementation rootProject.libs.coroutine
+
+    // Test dependencies
+    testImplementation rootProject.libs.junit
+    testImplementation rootProject.libs.mockitoCore
+    testImplementation rootProject.libs.mockitoKotlin
+
+    // Android Test dependencies
+    androidTestImplementation rootProject.libs.junit
+    androidTestImplementation rootProject.libs.testRunner
+    androidTestImplementation rootProject.libs.testRules
+    androidTestImplementation rootProject.libs.testCore
+}

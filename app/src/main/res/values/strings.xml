@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Monee</string>
+    <string name="card_edit_text_hint">Enter the first 6 digits of your card</string>
+    <string name="check_card_info_text">Check</string>
+    <string name="cardNumber">%s - %sXX - XXXX - XXXX</string>
+    <string name="countryText">COUNTRY</string>
+    <string name="card_bank_text">BANK</string>
+    <string name="card_brand">BRAND</string>
+    <string name="card_type">CARD TYPE</string>
+    <string name="no_card_info">Card Info not found</string>
+    <string name="server_failure">Server failure. Please try again.</string>
+    <string name="ocr_capture">Capture</string>
+    <string name="timeout_failure">Timeout. Please check your internet</string>
+    <string name="no_internet_failure">No connectivity. Please, check your internet</string>
+</resources>

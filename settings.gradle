@@ -1,0 +1,7 @@
+include ':core'
+include ':presentation'
+include ':domain'
+include ':data'
+include ':remote'
+include ':app'
+rootProject.name = "Monee"

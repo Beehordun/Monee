@@ -1,0 +1,132 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.example.posteey"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField 'String', 'BASE_URL', baseUrl
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("../debug_signing_keys")
+            storePassword System.getenv('KEY_STORE_PASSWORD') ?: keyStorePassword
+            keyAlias "debug android app"
+            keyPassword System.getenv('KEY_STORE_PASSWORD') ?: keyStorePassword
+        }
+
+        release {
+            storeFile file("../release_signing_keys")
+            storePassword System.getenv('KEY_STORE_PASSWORD') ?: keyStorePassword
+            keyAlias "release android app"
+            keyPassword System.getenv('KEY_STORE_PASSWORD') ?: keyStorePassword
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.debug
+            debuggable true
+            applicationIdSuffix ".debug"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':core')
+    implementation project(':remote')
+    implementation project(':data')
+    implementation project(':domain')
+    implementation project(':presentation')
+
+    // Room Database
+    implementation rootProject.libs.roomRuntime
+    implementation rootProject.libs.roomKtx
+    kapt rootProject.libs.roomCompiler
+
+    // Dagger Hilt
+    implementation rootProject.libs.daggerHilt
+    kapt rootProject.libs.daggerHiltCompiler
+
+    implementation rootProject.libs.daggerHiltViewModel
+    kapt rootProject.libs.daggerHiltAndroidCompiler
+
+    // Facebook Shimmer
+    implementation rootProject.libs.shimmer
+
+    // Design library
+    implementation rootProject.libs.constraintLayout
+    implementation rootProject.libs.appcompat
+    implementation rootProject.libs.design
+    implementation rootProject.libs.supportV4
+    implementation rootProject.libs.recyclerview
+    implementation rootProject.libs.cardview
+
+    // Kotlin
+    implementation rootProject.libs.kotlinStdlibJdk7
+
+    // CameraX dependencies
+    implementation rootProject.libs.cameraxCore
+    implementation rootProject.libs.cameraxCamera2
+    implementation rootProject.libs.cameraxLifeCycle
+    implementation rootProject.libs.cameraxView
+
+    // ML Kit dependencies
+    implementation rootProject.libs.mlKitTextRecognition
+
+    // Jetpack libraries
+    implementation rootProject.libs.lifecycle
+    implementation rootProject.libs.coreKtx
+    implementation rootProject.libs.viewModel
+    implementation rootProject.libs.fragmentKtx
+
+    // Okhttp & Retrofit
+    implementation rootProject.libs.okhttp
+    implementation rootProject.libs.loggingInterceptor
+    implementation rootProject.libs.okhttpUrlConnection
+    implementation rootProject.libs.retrofit
+
+    implementation rootProject.libs.gson
+    implementation rootProject.libs.gsonConverter
+    implementation rootProject.libs.gsonScalarConverter
+
+    // Image library
+    implementation rootProject.libs.glide
+    kapt rootProject.libs.glideCompiler
+
+    // Android Test dependencies
+    androidTestImplementation rootProject.libs.junit
+    androidTestImplementation rootProject.libs.testRunner
+    androidTestImplementation rootProject.libs.testRules
+    androidTestImplementation rootProject.libs.testCore
+}

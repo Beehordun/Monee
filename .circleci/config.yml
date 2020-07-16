@@ -1,0 +1,105 @@
+# Android CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-android/ for more details
+
+version: 2.1
+
+executors:
+  monee-android-executor:
+    docker:
+      - image: circleci/android:api-29
+    working_directory: ~/code
+    environment:
+      JAVA_OPTIONS: "-Xmx2048m"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dorg.gradle.workers.max=2 -Dkotlin.compiler.execution.strategy=in-process -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.jvmargs=-Xmx2048m"
+      TERM: dumb
+
+jobs:
+  build:
+    executor: monee-android-executor
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+          command: sudo chmod +x ./gradlew
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+  test_and_check:
+    executor: monee-android-executor
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Run App module unit test
+          command: ./gradlew :app:testDebugUnitTest
+      - store_artifacts:
+          path: app/build/reports
+      - store_test_results:
+          path: app/build/test-results
+      - run:
+          name: Run App Module Detekt Checks
+          command: ./gradlew :app:detekt
+      - store_artifacts:
+          path: app/build/reports/detekt
+      - run:
+          name: Run Data module unit test
+          command: ./gradlew :data:testDebugUnitTest
+      - store_artifacts:
+          path: data/build/reports
+      - store_test_results:
+          path: data/build/test-results
+      - run:
+          name: Run Data Module Detekt Checks
+          command: ./gradlew :data:detekt
+      - store_artifacts:
+          path: data/build/reports/detekt
+      - run:
+          name: Run domain module unit test
+          command: ./gradlew :domain:testDebugUnitTest
+      - store_artifacts:
+          path: domain/build/reports
+      - store_test_results:
+          path: domain/build/test-results
+      - run:
+          name: Run domain Module Detekt Checks
+          command: ./gradlew :domain:detekt
+      - run:
+          name: Run presentation module unit test
+          command: ./gradlew :presentation:testDebugUnitTest
+      - store_artifacts:
+          path: presentation/build/reports
+      - store_test_results:
+          path: presentation/build/test-results
+      - run:
+          name: Run presentation Module Detekt Checks
+          command: ./gradlew :presentation:detekt
+      - run:
+          name: Run core module unit test
+          command: ./gradlew :core:testDebugUnitTest
+      - store_artifacts:
+          path: core/build/reports
+      - store_test_results:
+          path: core/build/test-results
+      - run:
+          name: Run core Module Detekt Checks
+          command: ./gradlew :core:detekt
+      - run:
+          name: Run remote module unit test
+          command: ./gradlew :remote:testDebugUnitTest
+      - store_artifacts:
+          path: remote/build/reports
+      - store_test_results:
+          path: remote/build/test-results
+      - run:
+          name: Run remote Module Detekt Checks
+          command: ./gradlew :remote:detekt
+
