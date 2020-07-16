@@ -28,6 +28,10 @@ App uses coroutines to manage concurrency and multithreading.
 
 The different view states are modelled as a sealed class and are propagated from the viewmodel to the views(Activity) using livedata.
 
+# OCR
+
+App uses Google's MLKit for OCR.
+
 # Tests
 
 The remote, data, domain and presentation layers have unit tests.
