@@ -30,7 +30,7 @@ The different view states are modelled as a sealed class and are propagated from
 
 # OCR
 
-App uses Google's MLKit for OCR.
+App uses Google's MLKit for recognising debit card numbers.
 
 # Tests
 
